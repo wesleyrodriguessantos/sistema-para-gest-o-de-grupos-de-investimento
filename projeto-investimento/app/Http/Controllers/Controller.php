@@ -10,4 +10,16 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function homePage()
+    {
+        $varTitle = "Homepage do sistema de gestão para grupos de investimento";
+        return view('welcome', [
+            'title' => $varTitle
+        ]);
+    }
+    public function teste()
+    {
+        return "Texto de Teste";
+    }
 }
