@@ -18,8 +18,8 @@ class Controller extends BaseController
             'title' => $varTitle
         ]);
     }
-    public function teste()
+    public function fazerLogin()
     {
-        return "Texto de Teste";
+        return view('user.login');
     }
 }
