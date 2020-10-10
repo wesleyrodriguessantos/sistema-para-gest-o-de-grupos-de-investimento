@@ -14,4 +14,4 @@ Routes to user auth
 */
 Route::get('/login', [Controller::class, 'fazerLogin']);
 Route::post('/login', [DashboardController::class, 'auth'])->name('user.login');
-Route::post('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
