@@ -32,7 +32,22 @@ class DashboardController extends Controller
         ];
 
         try {
-            Auth::attempt($data, false);
+            if (env('PASSWORD_HASH')) {
+                Auth::attempt($data, false);
+            } else {
+                $user = $this->repository->findWhere(['email' => $request->get('username')])->first();
+
+                if (!$user) {
+                    throw new Exception("O e-mail informado é Inválido!!");
+                }
+
+                if ($user->password != $request->get('password')) {
+                    throw new Exception("A senha informada é Inválida!!");
+                }
+
+                Auth::login($user);
+            }
+
             return redirect()->route('user.dashboard');
         } catch (Exception $e) {
             return $e->getMessage();
