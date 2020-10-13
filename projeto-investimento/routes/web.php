@@ -17,4 +17,4 @@ Route::get('/login', [Controller::class, 'fazerLogin']);
 Route::post('/login', [DashboardController::class, 'auth'])->name('user.login');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
 
-Route::get('/user', [UsersController::class, 'index'])->name('user.index');
+Route::resource('/user', UsersController::class);

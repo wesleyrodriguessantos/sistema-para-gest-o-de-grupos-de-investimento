@@ -11,7 +11,7 @@
 		<h3>{{ session('success')['messages'] }}</h3>
 	@endif
 
-	{!! Form::open(['method' => 'post', 'class' => 'form-padrao']) !!}
+	{!! Form::open(['route' => 'user.store', 'method' => 'post', 'class' => 'form-padrao']) !!}
 		@include('user.form-fields')
 		@include('templates.formulario.submit', ['input' => 'Cadastrar'])
 	{!! Form::close() !!}
