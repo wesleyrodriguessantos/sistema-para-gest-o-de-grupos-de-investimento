@@ -25,11 +25,15 @@ class InstituitionRepositoryEloquent extends BaseRepository implements Instituit
         return Instituition::class;
     }
 
+    public function selectBoxList(string $descricao = 'name', string $chave = 'id')
+    {
+        return $this->model->pluck($descricao, $chave)->all();
+    }
     /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
+     * Specify Validator class name
+     *
+     * @return mixed
+     */
     public function validator()
     {
 
@@ -44,5 +48,4 @@ class InstituitionRepositoryEloquent extends BaseRepository implements Instituit
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
 }

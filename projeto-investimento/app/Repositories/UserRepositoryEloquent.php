@@ -25,6 +25,11 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         return User::class;
     }
 
+    public function selectBoxList(string $descricao = 'name', string $chave = 'id')
+    {
+        return $this->model->pluck($descricao, $chave)->all();
+    }
+    
     /**
     * Specify Validator class name
     *

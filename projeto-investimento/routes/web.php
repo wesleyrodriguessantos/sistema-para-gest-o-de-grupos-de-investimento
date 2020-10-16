@@ -1,7 +1,9 @@
 <?php
 
+
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\InstituitionsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +22,4 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dash
 
 Route::resource('/user', UsersController::class);
 Route::resource('/instituition', InstituitionsController::class);
+route::resource('/group', GroupsController::class);
