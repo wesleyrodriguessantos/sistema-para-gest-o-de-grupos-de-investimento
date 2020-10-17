@@ -75,9 +75,7 @@ class UsersController extends Controller
             'messages' => $request['messages']
         ]);
 
-        return view('user.index', [
-            'usuario' => $usuario,
-        ]);
+        return redirect()->route('user.index');
     }
 
     /**
