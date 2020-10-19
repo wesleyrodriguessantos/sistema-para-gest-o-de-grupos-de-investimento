@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
@@ -32,6 +33,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = ['email_verified_at' => 'datetime',];
+
+    public function groups()
+    {
+        // Relacionamento N:N
+        return $this->belongsToMany(Group::class, 'user_groups');
+    }
 
     public function setPasswordAttribute($value)
     {
