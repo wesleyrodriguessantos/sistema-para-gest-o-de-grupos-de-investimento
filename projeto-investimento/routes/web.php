@@ -28,5 +28,6 @@ route::resource('/group', GroupsController::class);
 Route::resource('/instituition.product', ProductsController::class);
 
 Route::get('/moviment', [MovimentsController::class, 'application'])->name('moviment.application');
+Route::post('/moviment', [MovimentsController::class, 'storeApplication'])->name('moviment.application.store');
 
 Route::post('/group/{group_id}/user', [GroupsController::class, 'userStore'])->name('group.user.store');
