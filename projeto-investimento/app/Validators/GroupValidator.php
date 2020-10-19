@@ -19,10 +19,12 @@ class GroupValidator extends LaravelValidator
      */
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
-            'name' => 'required|',
+            'name' => 'required',
             'user_id' => 'required|exists:users,id',
-            'instituition_id' =>  'required|exists:instituitions,id',
+            'instituition_id' => 'required|exists:instituitions,id',
         ],
-        ValidatorInterface::RULE_UPDATE => [],
+        ValidatorInterface::RULE_UPDATE => [
+            'name' => 'required',
+        ],
     ];
 }
