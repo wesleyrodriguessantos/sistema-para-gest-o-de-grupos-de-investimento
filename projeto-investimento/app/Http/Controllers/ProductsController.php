@@ -101,6 +101,7 @@ class ProductsController extends Controller
         return view('products.show', compact('product'));
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -110,10 +111,12 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
+
         $product = $this->repository->find($id);
 
         return view('products.edit', compact('product'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -122,11 +125,10 @@ class ProductsController extends Controller
      * @param  string            $id
      *
      * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function update(ProductUpdateRequest $request, $id)
     {
+
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
@@ -134,7 +136,7 @@ class ProductsController extends Controller
             $product = $this->repository->update($request->all(), $id);
 
             $response = [
-                'message' => 'Product updated.',
+                'message' => 'Product Atualizado',
                 'data'    => $product->toArray(),
             ];
 
@@ -166,18 +168,14 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($instituition_id, $product_id)
     {
-        $deleted = $this->repository->delete($id);
+        $deleted = $this->repository->delete($product_id);
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Product deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Product deleted.');
+        session()->flash('success', [
+            'success'   => true,
+            'messages'  => "Produto removido"
+        ]);
+        return redirect()->back();
     }
 }
