@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\InstituitionsController;
+use App\Http\Controllers\MovimentsController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -25,5 +26,7 @@ Route::resource('/user', UsersController::class);
 Route::resource('/instituition', InstituitionsController::class);
 route::resource('/group', GroupsController::class);
 Route::resource('/instituition.product', ProductsController::class);
+
+Route::get('/moviment', [MovimentsController::class, 'application'])->name('moviment.application');
 
 Route::post('/group/{group_id}/user', [GroupsController::class, 'userStore'])->name('group.user.store');

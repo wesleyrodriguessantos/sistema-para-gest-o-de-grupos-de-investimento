@@ -11,14 +11,12 @@ use App\Http\Requests\MovimentCreateRequest;
 use App\Http\Requests\MovimentUpdateRequest;
 use App\Repositories\MovimentRepository;
 use App\Validators\MovimentValidator;
+use App\Entities\{Group, Product, Moviment};
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
-/**
- * Class MovimentsController.
- *
- * @package namespace App\Http\Controllers;
- */
 class MovimentsController extends Controller
 {
+
     /**
      * @var MovimentRepository
      */
@@ -29,176 +27,85 @@ class MovimentsController extends Controller
      */
     protected $validator;
 
-    /**
-     * MovimentsController constructor.
-     *
-     * @param MovimentRepository $repository
-     * @param MovimentValidator $validator
-     */
     public function __construct(MovimentRepository $repository, MovimentValidator $validator)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $moviments = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $moviments,
-            ]);
-        }
-
-        return view('moviments.index', compact('moviments'));
+        return view('moviment.index', [
+            'product_list' => Product::all(),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  MovimentCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function store(MovimentCreateRequest $request)
+    public function application()
     {
-        try {
+        $user           = FacadesAuth::user();
+        $group_list     = $user->groups->pluck('name', 'id');
+        $product_list   = Product::all()->pluck('name', 'id');
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $moviment = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Moviment created.',
-                'data'    => $moviment->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+        return view('moviment.application', [
+            'group_list'    => $group_list,
+            'product_list'  => $product_list,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function storeApplication(Request $request)
     {
-        $moviment = $this->repository->find($id);
+        $movimento = Moviment::create([
+            'user_id'         => FacadesAuth::user()->id,
+            'group_id'         => $request->get('group_id'),
+            'product_id'     => $request->get('product_id'),
+            'value'         => $request->get('value'),
+            'type'             => 1,
+        ]);
 
-        if (request()->wantsJson()) {
+        session()->flash('success', [
+            'success' => true,
+            'messages' => "Sua aplicação de " . $movimento->value . " no produto " . $movimento->product->name . " foi realizada com sucesso!",
+        ]);
 
-            return response()->json([
-                'data' => $moviment,
-            ]);
-        }
-
-        return view('moviments.show', compact('moviment'));
+        return redirect()->route('moviment.application');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function getback()
     {
-        $moviment = $this->repository->find($id);
+        $user           = FacadesAuth::user();
+        $group_list     = $user->groups->pluck('name', 'id');
+        $product_list   = Product::all()->pluck('name', 'id');
 
-        return view('moviments.edit', compact('moviment'));
+        return view('moviment.getback', [
+            'group_list'    => $group_list,
+            'product_list'  => $product_list,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  MovimentUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function update(MovimentUpdateRequest $request, $id)
+    public function storeGetBack(Request $request)
     {
-        try {
+        $movimento = Moviment::create([
+            'user_id'         => FacadesAuth::user()->id,
+            'group_id'         => $request->get('group_id'),
+            'product_id'     => $request->get('product_id'),
+            'value'         => $request->get('value'),
+            'type'             => 2,
+        ]);
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
+        session()->flash('success', [
+            'success' => true,
+            'messages' => "Seu resgate de " . $movimento->value . " no produto " . $movimento->product->name . " foi realizado com sucesso!",
+        ]);
 
-            $moviment = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Moviment updated.',
-                'data'    => $moviment->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+        return redirect()->route('moviment.application');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function all()
     {
-        $deleted = $this->repository->delete($id);
+        $moviment_list = FacadesAuth::user()->moviments;
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Moviment deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Moviment deleted.');
+        return view('moviment.all', [
+            'moviment_list' => $moviment_list,
+        ]);
     }
 }

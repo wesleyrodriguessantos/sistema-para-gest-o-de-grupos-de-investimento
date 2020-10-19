@@ -19,7 +19,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="">
+			<a href="{{ route('moviment.application') }}">
 				<i class="fa fa-money"></i>
 				<h3>Investir</h3>
 			</a>
