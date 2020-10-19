@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Instituition;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -29,36 +30,25 @@ class ProductsController extends Controller
      */
     protected $validator;
 
-    /**
-     * ProductsController constructor.
-     *
-     * @param ProductRepository $repository
-     * @param ProductValidator $validator
-     */
     public function __construct(ProductRepository $repository, ProductValidator $validator)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
     }
 
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($instituition_id)
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $products = $this->repository->all();
+        $instituition = Instituition::find($instituition_id);
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $products,
-            ]);
-        }
-
-        return view('products.index', compact('products'));
+        return view('instituitions.product.index', [
+            'instituition' => $instituition
+        ]);
     }
 
     /**
@@ -70,33 +60,22 @@ class ProductsController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(ProductCreateRequest $request)
+    public function store(Request $request, $instituition_id)
     {
         try {
+            $data = $request->all();
+            $data['instituition_id'] = $instituition_id;
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $product = $this->repository->create($data);
 
-            $product = $this->repository->create($request->all());
+            session()->flash('success', [
+                'success'   => true,
+                'messages'  => "Produto cadastrado"
+            ]);
 
-            $response = [
-                'message' => 'Product created.',
-                'data'    => $product->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            return redirect()->route('instituition.product.index', $instituition_id);
         } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
