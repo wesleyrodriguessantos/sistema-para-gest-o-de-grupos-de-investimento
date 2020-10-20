@@ -37,7 +37,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="">
+			<a href="{{ route('moviment.all') }}">
 				<i class="fa fa-dollar"></i>
 				<h3>Extrato</h3>
 			</a>

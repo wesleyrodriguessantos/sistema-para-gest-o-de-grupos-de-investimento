@@ -25,6 +25,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dash
 Route::get('/user/moviment', [MovimentsController::class, 'index'])->name('moviment.index');
 Route::get('/moviment', [MovimentsController::class, 'application'])->name('moviment.application');
 Route::post('/moviment', [MovimentsController::class, 'storeApplication'])->name('moviment.application.store');
+Route::get('/moviment/all', [MovimentsController::class, 'all'])->name('moviment.all');
 
 Route::resource('/user', UsersController::class);
 Route::resource('/instituition', InstituitionsController::class);
