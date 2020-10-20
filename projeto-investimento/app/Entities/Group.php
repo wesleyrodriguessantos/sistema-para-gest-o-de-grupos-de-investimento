@@ -6,21 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
-/**
- * Class Group.
- *
- * @package namespace App\Entities;
- */
 class Group extends Model implements Transformable
 {
     use TransformableTrait;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['name', 'user_id', 'instituition_id'];
+
+    public function getTotalValueAttribute()
+    {
+        return $this->moviments()->applications()->sum('value') - $this->moviments()->outflows()->sum('value');
+    }
 
     public function owner()
     {
@@ -29,12 +24,18 @@ class Group extends Model implements Transformable
 
     public function users()
     {
-        // Relacionamento N:N
+        // RELACIONAMENTO N:N
         return $this->belongsToMany(User::class, 'user_groups');
     }
+
 
     public function instituition()
     {
         return $this->belongsTo(Instituition::class);
+    }
+
+    public function moviments()
+    {
+        return $this->hasMany(Moviment::class);
     }
 }

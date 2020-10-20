@@ -31,7 +31,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="">
+			<a href="{{ route('moviment.index') }}">
 				<i class="fa fa-dollar"></i>
 				<h3>Aplicações</h3>
 			</a>

@@ -22,12 +22,15 @@ Route::get('/login', [Controller::class, 'fazerLogin']);
 Route::post('/login', [DashboardController::class, 'auth'])->name('user.login');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
 
+Route::get('/user/moviment', [MovimentsController::class, 'index'])->name('moviment.index');
+Route::get('/moviment', [MovimentsController::class, 'application'])->name('moviment.application');
+Route::post('/moviment', [MovimentsController::class, 'storeApplication'])->name('moviment.application.store');
+
 Route::resource('/user', UsersController::class);
 Route::resource('/instituition', InstituitionsController::class);
 route::resource('/group', GroupsController::class);
 Route::resource('/instituition.product', ProductsController::class);
 
-Route::get('/moviment', [MovimentsController::class, 'application'])->name('moviment.application');
-Route::post('/moviment', [MovimentsController::class, 'storeApplication'])->name('moviment.application.store');
+
 
 Route::post('/group/{group_id}/user', [GroupsController::class, 'userStore'])->name('group.user.store');
