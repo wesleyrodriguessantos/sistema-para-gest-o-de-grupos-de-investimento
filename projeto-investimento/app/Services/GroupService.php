@@ -28,7 +28,7 @@ class GroupService
 
       return [
         'success'   => true,
-        'messages'   => "Grupo cadastrado",
+        'messages'   => "Grupo cadasrado",
         'data'       => $group,
       ];
     } catch (Exception $e) {
@@ -44,6 +44,7 @@ class GroupService
       }
     }
   }
+
 
   public function update($group_id, array $data): array
   {
@@ -69,6 +70,7 @@ class GroupService
       }
     }
   }
+
 
   public function userStore($group_id, $data)
   {

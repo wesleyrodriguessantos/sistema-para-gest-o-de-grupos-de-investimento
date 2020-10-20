@@ -23,8 +23,13 @@ Route::post('/login', [DashboardController::class, 'auth'])->name('user.login');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
 
 Route::get('/user/moviment', [MovimentsController::class, 'index'])->name('moviment.index');
+
+Route::get('/getback', [MovimentsController::class, 'getback'])->name('moviment.getback');
+Route::post('/getback', [MovimentsController::class, 'storeGetback'])->name('moviment.getback.store');
+
 Route::get('/moviment', [MovimentsController::class, 'application'])->name('moviment.application');
 Route::post('/moviment', [MovimentsController::class, 'storeApplication'])->name('moviment.application.store');
+
 Route::get('/moviment/all', [MovimentsController::class, 'all'])->name('moviment.all');
 
 Route::resource('/user', UsersController::class);

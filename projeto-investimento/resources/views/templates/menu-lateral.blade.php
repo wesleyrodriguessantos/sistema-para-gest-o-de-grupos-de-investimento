@@ -25,7 +25,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="">
+			<a href="{{ route('moviment.getback') }}">
 				<i class="fa fa-money"></i>
 				<h3>Resgatar</h3>
 			</a>
